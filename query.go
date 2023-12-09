@@ -3,6 +3,7 @@
 package rod
 
 import (
+	"context"
 	"errors"
 	"regexp"
 
@@ -245,20 +246,54 @@ func (p *Page) ElementsByJS(opts *EvalOptions) (Elements, error) {
 	return elemList, err
 }
 
-// Search for the given query in the DOM tree until the result count is not zero, before that it will keep retrying.
-// The query can be plain text or css selector or xpath.
-// It will search nested iframes and shadow doms too.
+// RetryOptions defines the configuration for the retry mechanism.
+type RetryOptions struct {
+	Context    context.Context             // The context to control the retry process.
+	Sleeper    func(context.Context) error // Sleeper function to wait between retries.
+	MaxRetries int                         // Maximum number of retries.
+}
+
+// NewRetry implements a retry mechanism based on the provided RetryOptions.
+// The function `fn` is executed up to MaxRetries times until it indicates to stop or an error occurs.
+func NewRetry(options RetryOptions, fn func() (stop bool, err error)) error {
+	for i := 0; i < options.MaxRetries; i++ {
+		stop, err := fn()
+		if stop {
+			return err
+		}
+		// Use the Sleeper function from options to wait before the next retry.
+		err = options.Sleeper(options.Context)
+		if err != nil {
+			return err
+		}
+	}
+	return nil // Return nil if the maximum retries are reached without success.
+}
+
+// Search performs a query in the DOM tree of the page.
+// It retries the search until the result count is not zero or the maximum retries are reached.
+// The query can be in the form of plain text, CSS selector, or XPath. It also searches within nested iframes and shadow DOMs.
 func (p *Page) Search(query string) (*SearchResult, error) {
 	sr := &SearchResult{
 		page:    p,
 		restore: p.EnableDomain(proto.DOMEnable{}),
 	}
 
-	err := utils.Retry(p.ctx, p.sleeper(), func() (bool, error) {
+	// Configure the retry options for the search.
+	retryOptions := RetryOptions{
+		Context:    p.ctx,
+		Sleeper:    p.sleeper(),
+		MaxRetries: 3,
+	}
+
+	// Use the NewRetry function with the defined options and search logic.
+	err := NewRetry(retryOptions, func() (bool, error) {
 		if sr.DOMPerformSearchResult != nil {
+			// Discard previous search results before performing a new search.
 			_ = proto.DOMDiscardSearchResults{SearchID: sr.SearchID}.Call(p)
 		}
 
+		// Perform the search with the given query.
 		res, err := proto.DOMPerformSearch{
 			Query:                     query,
 			IncludeUserAgentShadowDOM: true,
@@ -269,17 +304,19 @@ func (p *Page) Search(query string) (*SearchResult, error) {
 
 		sr.DOMPerformSearchResult = res
 
+		// If no results are found, prepare for a retry.
 		if res.ResultCount == 0 {
 			return false, nil
 		}
 
+		// Retrieve the search results.
 		result, err := proto.DOMGetSearchResults{
 			SearchID:  res.SearchID,
 			FromIndex: 0,
 			ToIndex:   1,
 		}.Call(p)
 		if err != nil {
-			// when the page is still loading the search result is not ready
+			// Handle specific errors related to search session.
 			if errors.Is(err, cdp.ErrCtxNotFound) ||
 				errors.Is(err, cdp.ErrSearchSessionNotFound) {
 				return false, nil
@@ -289,17 +326,14 @@ func (p *Page) Search(query string) (*SearchResult, error) {
 
 		id := result.NodeIds[0]
 
-		// TODO: This is definitely a bad design of cdp, hope they can optimize it in the future.
-		// It's unnecessary to ask the user to explicitly call it.
-		//
-		// When the id is zero, it means the proto.DOMDocumentUpdated has fired which will
-		// invalidate all the existing NodeID. We have to call proto.DOMGetDocument
-		// to reset the remote browser's tracker.
+		// Handle the case where the node ID is zero due to DOMDocumentUpdated event.
+		// This requires a call to DOMGetDocument to reset the browser's tracker.
 		if id == 0 {
 			_, _ = proto.DOMGetDocument{}.Call(p)
 			return false, nil
 		}
 
+		// Convert the NodeID to an Element.
 		el, err := p.ElementFromNode(&proto.DOMNode{NodeID: id})
 		if err != nil {
 			return true, err
@@ -309,6 +343,7 @@ func (p *Page) Search(query string) (*SearchResult, error) {
 
 		return true, nil
 	})
+
 	if err != nil {
 		return nil, err
 	}
