@@ -14,12 +14,12 @@ import (
 
 	"github.com/ysmood/gson"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/cdp"
-	"github.com/go-rod/rod/lib/devices"
-	"github.com/go-rod/rod/lib/input"
-	"github.com/go-rod/rod/lib/proto"
-	"github.com/go-rod/rod/lib/utils"
+	"github.com/Fromsko/rodPro"
+	"github.com/Fromsko/rodPro/lib/cdp"
+	"github.com/Fromsko/rodPro/lib/devices"
+	"github.com/Fromsko/rodPro/lib/input"
+	"github.com/Fromsko/rodPro/lib/proto"
+	"github.com/Fromsko/rodPro/lib/utils"
 )
 
 func TestGetElementPage(t *testing.T) {

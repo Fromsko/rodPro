@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/go-rod/rod"
+	"github.com/Fromsko/rodPro"
 )
 
 // This example demonstrates how to upload a file on a form.

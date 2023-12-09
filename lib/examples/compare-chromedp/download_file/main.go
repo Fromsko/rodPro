@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/proto"
+	"github.com/Fromsko/rodPro"
+	"github.com/Fromsko/rodPro/lib/proto"
 )
 
 func main() {

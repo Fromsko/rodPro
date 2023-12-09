@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/go-rod/rod"
-	"github.com/go-rod/rod/lib/launcher"
-	"github.com/go-rod/rod/lib/utils"
+	"github.com/Fromsko/rodPro"
+	"github.com/Fromsko/rodPro/lib/launcher"
+	"github.com/Fromsko/rodPro/lib/utils"
 	"github.com/ysmood/got"
 )
 

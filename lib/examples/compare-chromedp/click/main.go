@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/go-rod/rod"
+	"github.com/Fromsko/rodPro"
 )
 
 // This example demonstrates how to use a selector to click on an element.

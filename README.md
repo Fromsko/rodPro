@@ -1,9 +1,9 @@
 # Overview
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-rod/rod.svg)](https://pkg.go.dev/github.com/go-rod/rod)
+[![Go Reference](https://pkg.go.dev/badge/github.com/Fromsko/rodPro.svg)](https://pkg.go.dev/github.com/Fromsko/rodPro)
 [![Discord Chat](https://img.shields.io/discord/719933559456006165.svg)][discord room]
 
-## [Documentation](https://go-rod.github.io/) | [API reference](https://pkg.go.dev/github.com/go-rod/rod?tab=doc) | [FAQ](https://go-rod.github.io/#/faq/README)
+## [Documentation](https://go-rod.github.io/) | [API reference](https://pkg.go.dev/github.com/Fromsko/rodPro?tab=doc) | [FAQ](https://go-rod.github.io/#/faq/README)
 
 Rod is a high-level driver directly based on [DevTools Protocol](https://chromedevtools.github.io/devtools-protocol).
 It's designed for web automation and scraping for both high-level and low-level use, senior developers can use the low-level packages and functions to easily
@@ -22,7 +22,7 @@ customize or build up their own version of Rod, the high-level functions are jus
 - Two-step WaitEvent design, never miss an event ([how it works](https://github.com/ysmood/goob))
 - Correctly handles nested iframes or shadow DOMs
 - No zombie browser process after the crash ([how it works](https://github.com/ysmood/leakless))
-- [CI](https://github.com/go-rod/rod/actions) enforced 100% test coverage
+- [CI](https://github.com/Fromsko/rodPro/actions) enforced 100% test coverage
 
 ## Examples
 
@@ -30,13 +30,13 @@ Please check the [examples_test.go](examples_test.go) file first, then check the
 
 For more detailed examples, please search the unit tests.
 Such as the usage of method `HandleAuth`, you can search all the `*_test.go` files that contain `HandleAuth`,
-for example, use Github online [search in repository](https://github.com/go-rod/rod/search?q=HandleAuth&unscoped_q=HandleAuth).
-You can also search the GitHub [issues](https://github.com/go-rod/rod/issues) or [discussions](https://github.com/go-rod/rod/discussions),
+for example, use Github online [search in repository](https://github.com/Fromsko/rodPro/search?q=HandleAuth&unscoped_q=HandleAuth).
+You can also search the GitHub [issues](https://github.com/Fromsko/rodPro/issues) or [discussions](https://github.com/Fromsko/rodPro/discussions),
 a lot of usage examples are recorded there.
 
 [Here](lib/examples/compare-chromedp) is a comparison of the examples between rod and Chromedp.
 
-If you have questions, please raise an [issues](https://github.com/go-rod/rod/issues)/[discussions](https://github.com/go-rod/rod/discussions) or join the [chat room][discord room].
+If you have questions, please raise an [issues](https://github.com/Fromsko/rodPro/issues)/[discussions](https://github.com/Fromsko/rodPro/discussions) or join the [chat room][discord room].
 
 ## Join us
 
@@ -44,7 +44,7 @@ Your help is more than welcome! Even just open an issue to ask a question may gr
 
 Please read [How To Ask Questions The Smart Way](http://www.catb.org/~esr/faqs/smart-questions.html) before you ask questions.
 
-We use Github Projects to manage tasks, you can see the priority and progress of the issues [here](https://github.com/go-rod/rod/projects).
+We use Github Projects to manage tasks, you can see the priority and progress of the issues [here](https://github.com/Fromsko/rodPro/projects).
 
 If you want to contribute please read the [Contributor Guide](.github/CONTRIBUTING.md).
 

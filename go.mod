@@ -1,4 +1,4 @@
-module github.com/go-rod/rod
+module github.com/Fromsko/rodPro
 
 go 1.16
 

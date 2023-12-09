@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-rod/rod/lib/utils"
+	"github.com/Fromsko/rodPro/lib/utils"
 )
 
 func TestBackoffSleeperWakeNow(t *testing.T) {

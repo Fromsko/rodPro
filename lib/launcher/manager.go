@@ -9,9 +9,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/go-rod/rod/lib/cdp"
-	"github.com/go-rod/rod/lib/launcher/flags"
-	"github.com/go-rod/rod/lib/utils"
+	"github.com/Fromsko/rodPro/lib/cdp"
+	"github.com/Fromsko/rodPro/lib/launcher/flags"
+	"github.com/Fromsko/rodPro/lib/utils"
 )
 
 const (
