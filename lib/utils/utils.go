@@ -343,21 +343,28 @@ func CropImage(bin []byte, quality, x, y, width, height int) ([]byte, error) {
 
 	switch typ {
 	case "png":
-		img = img.(*image.NRGBA).SubImage(image.Rect(
-			x, y, x+width, y+height,
-		))
-
-		err = png.Encode(cropped, img)
-	case "jpeg":
-		img = img.(*image.YCbCr).SubImage(image.Rect(
-			x, y, x+width, y+height,
-		))
-
-		if quality == 0 {
-			quality = 80
+		switch img := img.(type) {
+		case *image.NRGBA:
+			img = img.SubImage(image.Rect(x, y, x+width, y+height)).(*image.NRGBA)
+			err = png.Encode(cropped, img)
+		case *image.RGBA:
+			img = img.SubImage(image.Rect(x, y, x+width, y+height)).(*image.RGBA)
+			err = png.Encode(cropped, img)
+		default:
+			return nil, fmt.Errorf("unsupported image type: %T", img)
 		}
 
-		err = jpeg.Encode(cropped, img, &jpeg.Options{Quality: quality})
+	case "jpeg":
+		switch img := img.(type) {
+		case *image.YCbCr:
+			img = img.SubImage(image.Rect(x, y, x+width, y+height)).(*image.YCbCr)
+			if quality == 0 {
+				quality = 80
+			}
+			err = jpeg.Encode(cropped, img, &jpeg.Options{Quality: quality})
+		default:
+			return nil, fmt.Errorf("unsupported image type for jpeg: %T", img)
+		}
 	}
 
 	return cropped.Bytes(), err
